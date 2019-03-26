@@ -1,0 +1,16 @@
+.imageContainer {
+    display:flex;
+
+    justify-content: center;
+
+}
+
+.bounding-box {
+    position:absolute;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    cursor:pointer;
+    box-shadow: 0 0 0 3px #140df2 inset;
+
+}
