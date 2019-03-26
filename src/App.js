@@ -4,7 +4,7 @@ import Logo from "./components/Logo/Logo.js";
 import Rank from "./components/Rank/Rank.js"
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.js";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition.js";
-import SignIn from "./components/SignIn/SignIn";
+import SignIn from "./components/SignIn/SignIn.js";
 import Particles from 'react-particles-js';
 
 import Clarifai from "clarifai";
@@ -136,7 +136,8 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box:{}
+      box: {},
+      route: 'signIn',
     }
   }
 
@@ -152,6 +153,19 @@ class App extends Component {
       bottomRow: height - (clarifaiFace.bottom_row * height)
 
     }
+  }
+
+  onRouteChange = (e) => {
+    e.preventDefault();
+    this.setState ({
+      route: "mainApp"
+    })
+  }
+
+  onSignOut = (e) => {
+    this.setState({
+      route: "signIn"
+    })
   }
 
   displayFaceBox = (box) => {
@@ -186,24 +200,38 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        
          <Particles className="particles"
           params={particlesOptions}		
             />
-        <Navigation />
-        <Logo /> 
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onButtonSubmit={this.onButtonSubmit}/>
-        <FaceRecognition
-          imageUrl={this.state.imageUrl}
-          box={this.state.box}
+        <Navigation
+          onSignOut={this.onSignOut}
           
           />
-    
+        {
+          this.state.route === "signIn" ?
+        
+            <SignIn
+              onRouteChange={this.onRouteChange}
+            /> :
+            <React.Fragment>
+              <Logo />
+              <Rank />
+              <ImageLinkForm
+                onInputChange={this.onInputChange}
+                onButtonSubmit={this.onButtonSubmit} />
+              <FaceRecognition
+                imageUrl={this.state.imageUrl}
+                box={this.state.box}
+              />
+            </React.Fragment>
+        }
       </div>
-    );
+        
+      );
+          
+    }
+          
   }
-}
-
-export default App;
+  
+  export default App;
