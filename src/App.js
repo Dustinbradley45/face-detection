@@ -6,10 +6,14 @@ import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.js";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition.js";
 import SignIn from "./components/SignIn/SignIn.js";
 import Particles from 'react-particles-js';
+import Register from "./components/Register/Register";
 
 import Clarifai from "clarifai";
 import "tachyons";
 import './App.css';
+
+// REDUX
+// import { connect } from "react-redux";
 
 const apiKey = "062adf5d28424067a9fbbc3a6463fecd"
 const app = new Clarifai.App({
@@ -138,6 +142,7 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signIn',
+      isSignedIn:false
     }
   }
 
@@ -158,13 +163,22 @@ class App extends Component {
   onRouteChange = (e) => {
     e.preventDefault();
     this.setState ({
-      route: "mainApp"
+      route: "mainApp",
+      isSignedIn: true
     })
   }
 
   onSignOut = (e) => {
     this.setState({
-      route: "signIn"
+      route: "signIn",
+      isSignedIn:false,
+    })
+  }
+
+  onRegister = (e) => {
+    this.setState({
+      route: "register",
+      isSignedIn:false,
     })
   }
 
@@ -206,14 +220,14 @@ class App extends Component {
             />
         <Navigation
           onSignOut={this.onSignOut}
+          onRegister={this.onRegister}
+           isSignedIn={this.state.isSignedIn}
           
           />
         {
-          this.state.route === "signIn" ?
+          this.state.route === "mainApp" ?
         
-            <SignIn
-              onRouteChange={this.onRouteChange}
-            /> :
+           
             <React.Fragment>
               <Logo />
               <Rank />
@@ -224,7 +238,18 @@ class App extends Component {
                 imageUrl={this.state.imageUrl}
                 box={this.state.box}
               />
-            </React.Fragment>
+            </React.Fragment> :
+            this.state.route === "signIn" ?
+             <SignIn
+              onRouteChange={this.onRouteChange}
+              onRegister={this.onRegister}
+              /> :
+              this.state.route === "register" ?
+                <Register
+                  onRouteChange={this.onRouteChange}
+                 
+                  /> :
+                null
         }
       </div>
         
